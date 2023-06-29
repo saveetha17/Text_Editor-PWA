@@ -18,7 +18,7 @@ export const putDb = async (content) => {
   const textDb = await openDB("jate", 1);
   const tx = textDb.transaction("jate", "readwrite");
   const store = tx.objectStore("jate");
-  const request = store.add({
+  const request = store.put({
     id: 1,
     value: content,
   });
@@ -31,7 +31,7 @@ export const putDb = async (content) => {
 // TODO: Add logic for a method that gets all the content from the database
 export const getDb = async () => {
   console.log("GET from the database");
-  const textDb = await writeDB("jate", 1);
+  const textDb = await openDB("jate", 1);
   const tx = textDb.transaction("jate", "readonly");
   const store = tx.objectStore("jate");
   const request = store.get(1);

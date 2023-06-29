@@ -4,28 +4,29 @@ const butInstall = document.getElementById("buttonInstall");
 // TODO: Add an event handler to the `beforeinstallprompt` event
 window.addEventListener("beforeinstallprompt", (event) => {
   //newly added
-  event.preventDefault();
-  deferredPrompt = event;
+  window.deferredPrompt = event;
   butInstall.disabled = false;
 });
 
 // TODO: Implement a click event handler on the `butInstall` element
 butInstall.addEventListener("click", async () => {
   //newly added
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    const choiceResult = await deferredPrompt.userChoice;
+  const promptEvent = window.deferredPrompt;
 
-    if (choiceResult.outcome === "accepted") {
-      console.log("App installed successfully!");
-    } else {
-      console.log("App installation declined.");
-    }
-    deferredPrompt = null;
+  if (!promptEvent) {
+    return;
   }
+
+  // Show prompt
+  promptEvent.prompt();
+
+  // Reset the deferred prompt variable, it can only be used once.
+  window.deferredPrompt = null;
+
+  butInstall.classList.toggle("hidden", true);
 });
 
 // TODO: Add an handler for the `appinstalled` event
 window.addEventListener("appinstalled", (event) => {
-  console.log("App installed");
+  window.deferredPrompt = null;
 });
